@@ -1,0 +1,7 @@
+{
+  "saludo": "Hello world",
+  "llenar_campo": "Please fill this field",
+  "bienvenido": "Welcome, usuario",
+  "confirmar_eliminar": "Do you really want to delete cosa?"
+
+}
