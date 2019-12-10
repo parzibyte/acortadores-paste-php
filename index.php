@@ -20,7 +20,7 @@ define("RUTA_LOGS", __DIR__ . DIRECTORY_SEPARATOR . "logs");
 define("URL_RAIZ", Comun::env("URL_RAIZ"));
 define("URL_DIRECTORIO_PUBLICO", URL_RAIZ . "/public");
 define("RUTA_API", URL_RAIZ . "/api");
-define("NOMBRE_APLICACION", "Plantilla PHP");
+define("NOMBRE_APLICACION", "Acortadores & Paste");
 define("AUTOR", "Luis Cabrera Benito a.k.a parzibyte");
 define("WEB_AUTOR", "https://parzibyte.me/blog");
 ini_set('display_errors', 0);

@@ -1,0 +1,57 @@
+{% extends "master.twig" %}
+{% block titulo %}Nueva subida
+{% endblock %}
+{% block contenido %}
+    <main class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <h4 class="text-center">Detalles</h4>
+                {% include "componentes/sesion_flash.twig" %}
+                <div class="form-group">
+                    <label for="titulo">Título</label>
+                    <input id="titulo" class="form-control" type="text" name="titulo" placeholder="Título">
+                </div>
+                <div class="form-group">
+                    <label for="acortarCon">Acortar con</label>
+                    <select class="form-control" name="acortarCon" id="acortarCon">
+                        <option value="ouo">ouo.io</option>
+                        <option value="adfly">adf.ly</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-8">
+                <h4>Enlaces</h4>
+                <div class="form-group">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Leyenda</th>
+                            <th>Enlace</th>
+                            <th>Quitar</th>
+                            <th>Agregar otro</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><input type="text" class="form-control" placeholder="Por ejemplo, parte 1"></td>
+                            <td><input type="text" class="form-control" placeholder="https://parzibyte.me/blog"></td>
+                            <td>
+                                <a href="#" class="btn btn-danger">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                            <td>
+
+                                <a href="#" class="btn btn-danger">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

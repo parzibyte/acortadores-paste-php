@@ -67,6 +67,11 @@ $enrutador
             ->get("/usuarios/agregar", ["Parzibyte\Controladores\ControladorUsuarios", "agregar"])
             ->get("/usuarios/hacerAdministrador/{idUsuario}", ["Parzibyte\Controladores\ControladorUsuarios", "hacerAdministrador"])
             ->get("/usuarios/eliminar/{idUsuario}", ["Parzibyte\Controladores\ControladorUsuarios", "confirmarEliminacion"]);
+
+        # Rutas de enlaces
+        $enrutadorVistasPrivadas->get("enlaces", ["Parzibyte\Controladores\ControladorEnlaces", "index"]);
+        $enrutadorVistasPrivadas->get("enlaces/agregar", ["Parzibyte\Controladores\ControladorEnlaces", "agregar"]);
+        $enrutadorVistasPrivadas->get("subidas", ["Parzibyte\Controladores\ControladorSubidas", "formularioAgregar"]);
     });
 
 $enrutador->post("/login", ["Parzibyte\Controladores\ControladorLogin", "login"]);
