@@ -2,22 +2,34 @@
 {% block titulo %}Nueva subida
 {% endblock %}
 {% block contenido %}
-    <main class="container-fluid">
+    <main class="container-fluid" id="agregarSubidaApp">
         <div class="row">
             <div class="col-12 col-md-4">
                 <h4 class="text-center">Detalles</h4>
                 {% include "componentes/sesion_flash.twig" %}
                 <div class="form-group">
                     <label for="titulo">Título</label>
-                    <input id="titulo" class="form-control" type="text" name="titulo" placeholder="Título">
+                    <input v-model="detalles.titulo" id="titulo" class="form-control" type="text" name="titulo"
+                           placeholder="Título">
                 </div>
-                <div class="form-group">
-                    <label for="acortarCon">Acortar con</label>
-                    <select class="form-control" name="acortarCon" id="acortarCon">
-                        <option value="ouo">ouo.io</option>
-                        <option value="adfly">adf.ly</option>
+                <label for="acortarCon">Acortar todos los enlaces con...</label>
+                <div class="form-group form-inline" v-for="(acortador,indice) in detalles.acortadores">
+                    <select :key="indice" v-model="acortador.id" class="form-control" name="acortarCon">
+                        <option v-for="acortadorDisponible in acortadoresDisponibles" :value="acortadorDisponible.id">
+                            {% verbatim %}
+                                {{acortadorDisponible.nombre}}
+                            {% endverbatim %}
+                        </option>
                     </select>
+                    <button v-show="detalles.acortadores.length > 1" class="btn btn-danger btn-sm ml-2">
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <button v-show="indice+1==detalles.acortadores.length" @click="agregarAcortador()"
+                            class="btn btn-success ml-2 btn-sm">
+                        <i class="fa fa-plus"></i>
+                    </button>
                 </div>
+                <button class="btn-success btn">Guardar</button>
             </div>
 
             <div class="col-12 col-md-8">
@@ -38,12 +50,12 @@
                             <td><input type="text" class="form-control" placeholder="https://parzibyte.me/blog"></td>
                             <td>
                                 <a href="#" class="btn btn-danger">
-                                    <i class="fa fa-trash"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </td>
                             <td>
 
-                                <a href="#" class="btn btn-danger">
+                                <a href="#" class="btn btn-success">
                                     <i class="fa fa-plus"></i>
                                 </a>
                             </td>
@@ -54,4 +66,33 @@
             </div>
         </div>
     </main>
+    <script type="text/javascript">
+        new Vue({
+            el: "#agregarSubidaApp",
+            data: () => ({
+                acortadoresDisponibles: [
+                    {
+                        id: 1,
+                        nombre: "ouo.io"
+                    },
+                    {
+                        id: 2,
+                        nombre: "adf.ly (Ad fly)"
+                    },
+                ],
+                detalles: {
+                    titulo: "",
+                    acortadores: []
+                }
+            }),
+            methods: {
+                agregarAcortador() {
+                    this.detalles.acortadores.push(Object.assign({}, this.acortadoresDisponibles[0]));
+                },
+            },
+            mounted() {
+                this.agregarAcortador();
+            }
+        });
+    </script>
 {% endblock %}
