@@ -21,7 +21,8 @@
                             {% endverbatim %}
                         </option>
                     </select>
-                    <button v-show="detalles.acortadores.length > 1" class="btn btn-danger btn-sm ml-2">
+                    <button @click="eliminarAcortador(indice)" v-show="detalles.acortadores.length > 1"
+                            class="btn btn-danger btn-sm ml-2">
                         <i class="fa fa-times"></i>
                     </button>
                     <button v-show="indice+1==detalles.acortadores.length" @click="agregarAcortador()"
@@ -40,24 +41,23 @@
                         <tr>
                             <th>Leyenda</th>
                             <th>Enlace</th>
-                            <th>Quitar</th>
-                            <th>Agregar otro</th>
+                            <th>Opciones</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td><input type="text" class="form-control" placeholder="Por ejemplo, parte 1"></td>
-                            <td><input type="text" class="form-control" placeholder="https://parzibyte.me/blog"></td>
+                        <tr v-for="(enlace, i) in detalles.enlaces">
+                            <td><input v-model="enlace.leyenda" type="text" class="form-control"
+                                       placeholder="Por ejemplo, parte 1"></td>
+                            <td><input v-model="enlace.enlace" type="text" class="form-control"
+                                       placeholder="https://parzibyte.me/blog"></td>
                             <td>
-                                <a href="#" class="btn btn-danger">
+                                <button v-show="detalles.enlaces.length > 1" @click="eliminarEnlace(i)"
+                                        class="btn btn-danger">
                                     <i class="fa fa-times"></i>
-                                </a>
-                            </td>
-                            <td>
-
-                                <a href="#" class="btn btn-success">
+                                </button>
+                                <button v-show="detalles.enlaces.length === i+1" @click="agregarEnlace()" class="btn btn-success">
                                     <i class="fa fa-plus"></i>
-                                </a>
+                                </button>
                             </td>
                         </tr>
                         </tbody>
@@ -82,16 +82,30 @@
                 ],
                 detalles: {
                     titulo: "",
-                    acortadores: []
+                    acortadores: [],
+                    enlaces: [],
                 }
             }),
             methods: {
                 agregarAcortador() {
                     this.detalles.acortadores.push(Object.assign({}, this.acortadoresDisponibles[0]));
                 },
+                eliminarAcortador(indice) {
+                    this.detalles.acortadores.splice(indice, 1);
+                },
+                agregarEnlace() {
+                    this.detalles.enlaces.push({
+                        leyenda: "",
+                        enlace: "",
+                    });
+                },
+                eliminarEnlace(indice) {
+                    this.detalles.enlaces.splice(indice, 1);
+                },
             },
             mounted() {
                 this.agregarAcortador();
+                this.agregarEnlace();
             }
         });
     </script>
