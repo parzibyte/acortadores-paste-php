@@ -81,6 +81,13 @@ class ModeloSubidas
                 return false;
             }
         }
+        $sentencia = $bd->prepare("INSERT INTO acortadores_subidas(id_subida, id_acortador) VALUES (?, ?)");
+        foreach ($subida->getAcortadores() as $acortador) {
+            if (!$sentencia->execute([$idSubida, $acortador])) {
+                $bd->rollBack();
+                return false;
+            };
+        }
         $bd->commit();
         return $idSubida;
     }

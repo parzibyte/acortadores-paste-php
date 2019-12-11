@@ -70,18 +70,9 @@ CREATE TABLE enlaces_subidas
     FOREIGN KEY (id_subida) REFERENCES subidas (id) ON DELETE CASCADE
 );
 
-CREATE TABLE acortadores_disponibles
+CREATE TABLE acortadores_subidas
 (
-    id     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    nombre VARCHAR(255)    NOT NULL,
-    PRIMARY KEY (id)
+    id_subida    BIGINT UNSIGNED NOT NULL,
+    id_acortador INT(8)          NOT NULL,
+    FOREIGN KEY (id_subida) REFERENCES subidas (id) ON DELETE CASCADE
 );
-
-INSERT INTO acortadores_disponibles
-    (nombre)
-VALUES ('adf.ly'),
-       ('shorte.st'),
-       ('shrinkme.io'),
-       ('shortzon.com'),
-       ('ouo.io'),
-       ('shink.me');
