@@ -10,7 +10,12 @@ use Phroute\Phroute\Exception\HttpMethodNotAllowedException;
 use Phroute\Phroute\Exception\HttpRouteNotFoundException;
 use Valitron\Validator as V;
 
-
+const ID_ACORTADOR_ADFLY = 1,
+ID_ACORTADOR_OUO = 2,
+ID_ACORTADOR_SHINK_ME = 3,
+ID_ACORTADOR_SHORTEST = 4,
+ID_ACORTADOR_SHORTZON = 5,
+ID_ACORTADOR_SHRINKMEIO = 6;
 
 V::langDir(__DIR__ . "/vendor/vlucas/valitron/lang");
 V::lang('es');
@@ -46,6 +51,11 @@ function json($datos)
     header("Content-type: application/json");
     echo json_encode($datos);
     return;
+}
+
+function getJsonRequest()
+{
+    return json_decode(file_get_contents("php://input"));
 }
 
 

@@ -70,8 +70,10 @@ $enrutador
 
         # Rutas de enlaces
         $enrutadorVistasPrivadas->get("enlaces", ["Parzibyte\Controladores\ControladorEnlaces", "index"]);
+        $enrutadorVistasPrivadas->get("acortadores_disponibles", ["Parzibyte\Controladores\ControladorSubidas", "obtenerAcortadoresDisponibles"]);
         $enrutadorVistasPrivadas->get("enlaces/agregar", ["Parzibyte\Controladores\ControladorEnlaces", "agregar"]);
         $enrutadorVistasPrivadas->get("subidas", ["Parzibyte\Controladores\ControladorSubidas", "formularioAgregar"]);
+        $enrutadorVistasPrivadas->post("subida", ["Parzibyte\Controladores\ControladorSubidas", "agregarSubida"]);
     });
 
 $enrutador->post("/login", ["Parzibyte\Controladores\ControladorLogin", "login"]);

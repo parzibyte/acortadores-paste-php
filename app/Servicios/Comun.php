@@ -5,6 +5,10 @@ use Exception;
 
 class Comun
 {
+    public static function fechaYHoraActualParaMySQL(){
+        return date("Y-m-d H:i:s");
+    }
+
     public static function env($clave, $valorPorDefecto = null)
     {
         /*
@@ -33,4 +37,11 @@ class Comun
             throw new Exception("No existe la clave (" . $clave . ") en el archivo de configuración");
         }
     }
+
+    public static function comienzaCon($pajar, $aguja)
+    {
+        return $aguja === ''
+            || strrpos($pajar, $aguja, -strlen($pajar)) !== false;
+    }
+
 }

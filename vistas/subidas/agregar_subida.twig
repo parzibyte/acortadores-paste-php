@@ -30,7 +30,6 @@
                         <i class="fa fa-plus"></i>
                     </button>
                 </div>
-                <button class="btn-success btn">Guardar</button>
             </div>
 
             <div class="col-12 col-md-8">
@@ -55,7 +54,8 @@
                                         class="btn btn-danger">
                                     <i class="fa fa-times"></i>
                                 </button>
-                                <button v-show="detalles.enlaces.length === i+1" @click="agregarEnlace()" class="btn btn-success">
+                                <button v-show="detalles.enlaces.length === i+1" @click="agregarEnlace()"
+                                        class="btn btn-success">
                                     <i class="fa fa-plus"></i>
                                 </button>
                             </td>
@@ -64,22 +64,16 @@
                     </table>
                 </div>
             </div>
+            <div class="col-12">
+                <button @click="guardar()" class="btn-success btn">Guardar</button>
+            </div>
         </div>
     </main>
     <script type="text/javascript">
         new Vue({
             el: "#agregarSubidaApp",
             data: () => ({
-                acortadoresDisponibles: [
-                    {
-                        id: 1,
-                        nombre: "ouo.io"
-                    },
-                    {
-                        id: 2,
-                        nombre: "adf.ly (Ad fly)"
-                    },
-                ],
+                acortadoresDisponibles: [],
                 detalles: {
                     titulo: "",
                     acortadores: [],
@@ -87,6 +81,12 @@
                 }
             }),
             methods: {
+                obtenerAcortadoresDisponibles() {
+                    return ParzibyteHttp.get("/acortadores_disponibles")
+                        .then(acortadores => {
+                            this.acortadoresDisponibles = acortadores;
+                        })
+                },
                 agregarAcortador() {
                     this.detalles.acortadores.push(Object.assign({}, this.acortadoresDisponibles[0]));
                 },
@@ -102,10 +102,22 @@
                 eliminarEnlace(indice) {
                     this.detalles.enlaces.splice(indice, 1);
                 },
+                guardar() {
+                    const payload = Object.assign({}, this.detalles);
+                    payload.acortadores = payload.acortadores.map(a => a.id);
+                    ParzibyteHttp.post("/subida", payload)
+                        .then(r => {
+                            console.log("A ver: ", r);
+                        });
+                    console.log("Guardamos: ", this.detalles);
+                },
             },
             mounted() {
-                this.agregarAcortador();
-                this.agregarEnlace();
+                this.obtenerAcortadoresDisponibles()
+                    .then(() => {
+                        this.agregarEnlace();
+                        this.agregarAcortador();
+                    });
             }
         });
     </script>

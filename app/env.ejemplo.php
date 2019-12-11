@@ -40,3 +40,19 @@ NOMBRE_REMITENTE = "Nombre del remitente"
 ; Configuraciones del sistema, ya no tanto credenciales
 PERMITIR_REGISTRO_USUARIOS = true
 IDIOMA = es
+
+; Comienzan claves de acortadores
+;adf.ly
+KEY_ADFLY=""
+UID_ADFLY=""
+;ouo.io
+KEY_OUOIO=""
+;shink.me
+KEY_SHINKME=""
+ID_SHINKME=""
+;shorte.st
+TOKEN_SHORTEST=""
+;shortzon.com
+KEY_SHORTZONCOM=""
+;shrinkme.io
+KEY_SHRINKMEIO=""
