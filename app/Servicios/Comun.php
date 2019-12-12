@@ -1,11 +1,13 @@
 <?php
+
 namespace Parzibyte\Servicios;
 
 use Exception;
 
 class Comun
 {
-    public static function fechaYHoraActualParaMySQL(){
+    public static function fechaYHoraActualParaMySQL()
+    {
         return date("Y-m-d H:i:s");
     }
 
@@ -42,6 +44,16 @@ class Comun
     {
         return $aguja === ''
             || strrpos($pajar, $aguja, -strlen($pajar)) !== false;
+    }
+
+    public static function obtenerCadenaAleatoria($longitud)
+    {
+        $caracteres = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $cadenaAleatoria = '';
+        for ($i = 0; $i < $longitud; $i++) {
+            $cadenaAleatoria .= $caracteres[rand(0, strlen($caracteres) - 1)];
+        }
+        return $cadenaAleatoria;
     }
 
 }

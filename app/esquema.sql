@@ -52,10 +52,11 @@ CREATE TABLE restablecimientos_passwords_usuarios
 
 CREATE TABLE subidas
 (
-    id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    titulo      VARCHAR(255)    NOT NULL,
-    descripcion TEXT            NOT NULL,
-    fecha       DATETIME        NOT NULL,
+    id          BIGINT UNSIGNED                                 NOT NULL AUTO_INCREMENT,
+    titulo      VARCHAR(255)                                    NOT NULL,
+    token       CHAR(5) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL UNIQUE,
+    descripcion TEXT                                            NOT NULL,
+    fecha       DATETIME                                        NOT NULL,
     PRIMARY KEY (id)
 );
 

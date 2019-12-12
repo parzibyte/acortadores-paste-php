@@ -17,6 +17,23 @@ use PDO;
 
 class ModeloSubidas
 {
+
+    public static function obtenerSubidaPorToken($token)
+    {
+        $sentencia = BD::obtener()
+            ->prepare("SELECT token FROM subidas WHERE token = ? limit 1");
+        $sentencia->execute([$token,]);
+        return $sentencia->fetchObject();
+    }
+
+    public static function obtenerTokenUnico()
+    {
+        do {
+            $token = Comun::obtenerCadenaAleatoria(5);
+        } while (self::obtenerSubidaPorToken($token) != null);
+        return $token;
+    }
+
     public static function obtenerAcortadoresDisponibles()
     {
         $acortadores = [
@@ -63,9 +80,9 @@ class ModeloSubidas
         }
         $bd = BD::obtener();
         $bd->beginTransaction();
-        $consulta = "INSERT INTO subidas(titulo, descripcion, fecha) VALUES (?, ? ,?)";
+        $consulta = "INSERT INTO subidas(titulo, descripcion, fecha, token) VALUES (?, ? ,?, ?)";
         $sentencia = $bd->prepare($consulta);
-        $parametros = [$subida->getTitulo(), $subida->getDescripcion(), Comun::fechaYHoraActualParaMySQL()];
+        $parametros = [$subida->getTitulo(), $subida->getDescripcion(), Comun::fechaYHoraActualParaMySQL(), self::obtenerTokenUnico()];
         $resultado = $sentencia->execute($parametros);
         if (!$resultado) {
             $bd->rollBack();
