@@ -32,4 +32,9 @@ class ControladorSubidas
     {
         return json(ModeloSubidas::obtenerAcortadoresDisponibles());
     }
+
+    public static function editarSubida($idSubida)
+    {
+        return view("subidas/editar_subida", ["idSubida" => $idSubida]);
+    }
 }

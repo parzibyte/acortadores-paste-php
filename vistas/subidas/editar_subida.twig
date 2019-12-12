@@ -1,0 +1,124 @@
+{% extends "master.twig" %}
+{% block titulo %}Detalles de subida
+{% endblock %}
+{% block contenido %}
+    <main class="container-fluid" id="editarSubidaApp">
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <h4 class="text-center">Detalles {{ idSubida }}</h4>
+                {% include "componentes/sesion_flash.twig" %}
+                <div class="form-group">
+                    <label for="titulo">Título</label>
+                    <input v-model="detalles.titulo" id="titulo" class="form-control" type="text" name="titulo"
+                           placeholder="Título">
+                </div>
+                <label for="acortarCon">Acortar todos los enlaces con...</label>
+                <div class="form-group form-inline" v-for="(acortador,indice) in detalles.acortadores">
+                    <select :key="indice" v-model="acortador.id" class="form-control" name="acortarCon">
+                        <option v-for="acortadorDisponible in acortadoresDisponibles" :value="acortadorDisponible.id">
+                            {% verbatim %}
+                                {{acortadorDisponible.nombre}}
+                            {% endverbatim %}
+                        </option>
+                    </select>
+                    <button @click="eliminarAcortador(indice)" v-show="detalles.acortadores.length > 1"
+                            class="btn btn-danger btn-sm ml-2">
+                        <i class="fa fa-times"></i>
+                    </button>
+                    <button v-show="indice+1==detalles.acortadores.length" @click="agregarAcortador()"
+                            class="btn btn-success ml-2 btn-sm">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-8">
+                <h4>Enlaces</h4>
+                <div class="form-group">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Leyenda</th>
+                            <th>Enlace</th>
+                            <th>Opciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="(enlace, i) in detalles.enlaces">
+                            <td><input v-model="enlace.leyenda" type="text" class="form-control"
+                                       placeholder="Por ejemplo, parte 1"></td>
+                            <td><input v-model="enlace.enlace" type="text" class="form-control"
+                                       placeholder="https://parzibyte.me/blog"></td>
+                            <td>
+                                <button v-show="detalles.enlaces.length > 1" @click="eliminarEnlace(i)"
+                                        class="btn btn-danger">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                                <button v-show="detalles.enlaces.length === i+1" @click="agregarEnlace()"
+                                        class="btn btn-success">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-12">
+                <button @click="guardar()" class="btn-success btn">Guardar</button>
+            </div>
+        </div>
+    </main>
+    <script type="text/javascript">
+        new Vue({
+            el: "#editarSubidaApp",
+            data: () => ({
+                acortadoresDisponibles: [],
+                detalles: {
+                    titulo: "",
+                    acortadores: [],
+                    enlaces: [],
+                }
+            }),
+            methods: {
+                obtenerAcortadoresDisponibles() {
+                    return ParzibyteHttp.get("/acortadores_disponibles")
+                        .then(acortadores => {
+                            this.acortadoresDisponibles = acortadores;
+                        })
+                },
+                agregarAcortador() {
+                    this.detalles.acortadores.push(Object.assign({}, this.acortadoresDisponibles[0]));
+                },
+                eliminarAcortador(indice) {
+                    this.detalles.acortadores.splice(indice, 1);
+                },
+                agregarEnlace() {
+                    this.detalles.enlaces.push({
+                        leyenda: "",
+                        enlace: "",
+                    });
+                },
+                eliminarEnlace(indice) {
+                    this.detalles.enlaces.splice(indice, 1);
+                },
+                guardar() {
+                    const payload = Object.assign({}, this.detalles);
+                    payload.acortadores = payload.acortadores.map(a => a.id);
+                    ParzibyteHttp.post("/subida", payload)
+                        .then(r => {
+                            console.log("A ver: ", r);
+                        });
+                    console.log("Guardamos: ", this.detalles);
+                },
+            },
+            mounted() {
+                this.obtenerAcortadoresDisponibles()
+                    .then(() => {
+                        this.agregarEnlace();
+                        this.agregarAcortador();
+                    });
+            }
+        });
+    </script>
+{% endblock %}
