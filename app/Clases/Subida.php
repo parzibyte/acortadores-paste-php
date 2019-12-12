@@ -9,6 +9,9 @@
 namespace Parzibyte\Clases;
 
 
+use Parzibyte\Servicios\BD;
+use PDO;
+
 class Subida
 {
 
@@ -18,7 +21,7 @@ class Subida
      * @var $enlaces array
      * @var $acortadores array
      */
-    private $titulo, $descripcion, $enlaces, $acortadores;
+    public $titulo, $descripcion, $token, $enlaces, $acortadores, $id, $fecha;
 
     /**
      * Subida constructor.
@@ -26,14 +29,68 @@ class Subida
      * @param $descripcion
      * @param $enlaces
      * @param $acortadores
+     * @param string $token
+     * @param string $fecha
+     * @param null $id
      */
-    public function __construct($titulo, $descripcion, $enlaces, $acortadores)
+    public function __construct($titulo, $descripcion, $enlaces, $acortadores, $token = "", $fecha = "", $id = null)
     {
         $this->titulo = $titulo;
         $this->descripcion = $descripcion;
         $this->enlaces = $enlaces;
         $this->acortadores = $acortadores;
+        $this->token = $token;
+        $this->fecha = $fecha;
+        $this->id = $id;
     }
+
+    public static function porId($id)
+    {
+        $sentencia = BD::obtener()
+            ->prepare("SELECT id, titulo, token, descripcion, fecha FROM subidas WHERE id = ? limit 1");
+        $sentencia->execute([$id,]);
+        $objeto = $sentencia->fetch(PDO::FETCH_OBJ);
+        return new Subida($objeto->titulo, $objeto->descripcion, [], [], $objeto->token, $objeto->fecha, $objeto->id);
+    }
+
+    public function conEnlaces($incluirOriginales = false)
+    {
+        $consulta = "SELECT id_subida, leyenda, enlace_acortado " . ($incluirOriginales ? ", enlace_original" : "") . " from enlaces_subidas WHERE id_subida = ?";
+        $bd = BD::obtener();
+        $sentencia = $bd->prepare($consulta);
+        $sentencia->execute([$this->getId()]);
+        $this->setEnlaces($sentencia->fetchAll(PDO::FETCH_OBJ));
+        return $this;
+    }
+
+    public function conAcortadores($incluirOriginales = false)
+    {
+        $consulta = "SELECT id_acortador AS id FROM acortadores_subidas WHERE id_subida = ?";
+        $bd = BD::obtener();
+        $sentencia = $bd->prepare($consulta);
+        $sentencia->execute([$this->getId()]);
+        $this->setAcortadores($sentencia->fetchAll(PDO::FETCH_OBJ));
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     * @return Subida
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+        return $this;
+    }
+
 
     /**
      * @return mixed
@@ -106,8 +163,6 @@ class Subida
         $this->acortadores = $acortadores;
         return $this;
     }
-
-
 
 
 }

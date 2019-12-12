@@ -5,12 +5,18 @@
     <main class="container-fluid" id="editarSubidaApp">
         <div class="row">
             <div class="col-12 col-md-4">
-                <h4 class="text-center">Detalles {{ idSubida }}</h4>
+                <h4 class="text-center">Detalles</h4>
                 {% include "componentes/sesion_flash.twig" %}
                 <div class="form-group">
                     <label for="titulo">Título</label>
                     <input v-model="detalles.titulo" id="titulo" class="form-control" type="text" name="titulo"
                            placeholder="Título">
+                </div>
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <textarea v-model="detalles.descripcion" id="descripcion" class="form-control" rows="3" cols="5"
+                              name="descripcion"
+                              placeholder="Descripción"></textarea>
                 </div>
                 <label for="acortarCon">Acortar todos los enlaces con...</label>
                 <div class="form-group form-inline" v-for="(acortador,indice) in detalles.acortadores">
@@ -39,7 +45,8 @@
                         <thead>
                         <tr>
                             <th>Leyenda</th>
-                            <th>Enlace</th>
+                            <th>Enlace original</th>
+                            <th>Enlace acortado</th>
                             <th>Opciones</th>
                         </tr>
                         </thead>
@@ -47,7 +54,9 @@
                         <tr v-for="(enlace, i) in detalles.enlaces">
                             <td><input v-model="enlace.leyenda" type="text" class="form-control"
                                        placeholder="Por ejemplo, parte 1"></td>
-                            <td><input v-model="enlace.enlace" type="text" class="form-control"
+                            <td><input v-model="enlace.enlace_original" type="text" class="form-control"
+                                       placeholder="https://parzibyte.me/blog"></td>
+                            <td><input readonly v-model="enlace.enlace_acortado" type="text" class="form-control"
                                        placeholder="https://parzibyte.me/blog"></td>
                             <td>
                                 <button v-show="detalles.enlaces.length > 1" @click="eliminarEnlace(i)"
@@ -70,11 +79,16 @@
         </div>
     </main>
     <script type="text/javascript">
+        let idSubida = {{ idSubida }};
         new Vue({
             el: "#editarSubidaApp",
             data: () => ({
                 acortadoresDisponibles: [],
                 detalles: {
+                    id: null,
+                    fecha: "",
+                    token: "",
+                    descripcion: "",
                     titulo: "",
                     acortadores: [],
                     enlaces: [],
@@ -86,6 +100,13 @@
                         .then(acortadores => {
                             this.acortadoresDisponibles = acortadores;
                         })
+                },
+                obtenerDetallesDeSubida() {
+                    return ParzibyteHttp.get("/subida/" + idSubida)
+                        .then(subida => {
+                            this.detalles = subida;
+                            console.log({subida});
+                        });
                 },
                 agregarAcortador() {
                     this.detalles.acortadores.push(Object.assign({}, this.acortadoresDisponibles[0]));
@@ -105,19 +126,19 @@
                 guardar() {
                     const payload = Object.assign({}, this.detalles);
                     payload.acortadores = payload.acortadores.map(a => a.id);
-                    ParzibyteHttp.post("/subida", payload)
+                    payload.enlaces = payload.enlaces.map(enlace => ({
+                        enlace: enlace.enlace_original,
+                        leyenda: enlace.leyenda,
+                    }));
+                    ParzibyteHttp.put("/subida", payload)
                         .then(r => {
                             console.log("A ver: ", r);
                         });
-                    console.log("Guardamos: ", this.detalles);
                 },
             },
             mounted() {
                 this.obtenerAcortadoresDisponibles()
-                    .then(() => {
-                        this.agregarEnlace();
-                        this.agregarAcortador();
-                    });
+                    .then(this.obtenerDetallesDeSubida);
             }
         });
     </script>

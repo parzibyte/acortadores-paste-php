@@ -28,6 +28,13 @@ class ControladorSubidas
         return json($idSubida);
     }
 
+    public static function actualizarSubida()
+    {
+        $datos = getJsonRequest();
+        $idSubida = ModeloSubidas::actualizarSubida(new Subida($datos->titulo, $datos->descripcion, $datos->enlaces, $datos->acortadores, "", "", $datos->id));
+        return json($idSubida);
+    }
+
     public static function obtenerAcortadoresDisponibles()
     {
         return json(ModeloSubidas::obtenerAcortadoresDisponibles());
@@ -36,5 +43,10 @@ class ControladorSubidas
     public static function editarSubida($idSubida)
     {
         return view("subidas/editar_subida", ["idSubida" => $idSubida]);
+    }
+
+    public static function detallesDeSubida($idSubida)
+    {
+        return json(ModeloSubidas::obtenerSubidaPorId($idSubida));
     }
 }

@@ -18,10 +18,16 @@ use PDO;
 class ModeloSubidas
 {
 
+    public static function obtenerSubidaPorId($id)
+    {
+        return Subida::porId($id)->conEnlaces(true)->conAcortadores();
+    }
+
+
     public static function obtenerSubidaPorToken($token)
     {
         $sentencia = BD::obtener()
-            ->prepare("SELECT token FROM subidas WHERE token = ? limit 1");
+            ->prepare("SELECT id, titulo, token, descripcion, fecha FROM subidas WHERE token = ? limit 1");
         $sentencia->execute([$token,]);
         return $sentencia->fetchObject();
     }
@@ -30,7 +36,7 @@ class ModeloSubidas
     {
         do {
             $token = Comun::obtenerCadenaAleatoria(5);
-        } while (self::obtenerSubidaPorToken($token) != null);
+        } while (self::obtenerSubidaPorToken($token) != FALSE);
         return $token;
     }
 
@@ -107,5 +113,59 @@ class ModeloSubidas
         }
         $bd->commit();
         return $idSubida;
+    }
+
+
+    /**
+     * @param Subida $subida
+     * @return bool|string
+     * @throws Exception
+     */
+    public static function actualizarSubida(Subida $subida)
+    {
+        // Primero preparamos los enlaces y reportamos error si hay
+        foreach ($subida->getEnlaces() as $enlace) {
+            $enlace->acortado = Acortador::acortarSegunDefinido($subida->getAcortadores(), $enlace->enlace);
+        }
+        $bd = BD::obtener();
+        $bd->beginTransaction();
+        // Limpiar
+        $sentencia = $bd->prepare("DELETE FROM acortadores_subidas WHERE id_subida = ?");
+        if (!$sentencia->execute([$subida->getId()])) {
+            $bd->rollBack();
+            return false;
+        }
+        $sentencia = $bd->prepare("DELETE FROM enlaces_subidas WHERE id_subida = ?");
+        if (!$sentencia->execute([$subida->getId()])) {
+            $bd->rollBack();
+            return false;
+        }
+
+        $consulta = "UPDATE subidas SET titulo = ?, descripcion = ?, fecha = ? WHERE id = ?";
+        $sentencia = $bd->prepare($consulta);
+        $parametros = [$subida->getTitulo(), $subida->getDescripcion(), Comun::fechaYHoraActualParaMySQL(), $subida->getId()];
+        $resultado = $sentencia->execute($parametros);
+        if (!$resultado) {
+            $bd->rollBack();
+            return false;
+        }
+        $consulta = "INSERT INTO enlaces_subidas(id_subida, leyenda, enlace_original, enlace_acortado) VALUES (?,?,?,?)";
+        $sentencia = $bd->prepare($consulta);
+        foreach ($subida->getEnlaces() as $enlace) {
+            $resultado = $sentencia->execute([$subida->getId(), $enlace->leyenda, $enlace->enlace, $enlace->acortado]);
+            if (!$resultado) {
+                $bd->rollBack();
+                return false;
+            }
+        }
+        $sentencia = $bd->prepare("INSERT INTO acortadores_subidas(id_subida, id_acortador) VALUES (?, ?)");
+        foreach ($subida->getAcortadores() as $acortador) {
+            if (!$sentencia->execute([$subida->getId(), $acortador])) {
+                $bd->rollBack();
+                return false;
+            };
+        }
+        $bd->commit();
+        return $subida->getId();
     }
 }
