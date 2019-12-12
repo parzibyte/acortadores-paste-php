@@ -24,7 +24,7 @@ class ControladorSubidas
     public static function agregarSubida()
     {
         $datos = getJsonRequest();
-        $idSubida = ModeloSubidas::nuevaSubida(new Subida($datos->titulo, "", $datos->enlaces, $datos->acortadores));
+        $idSubida = ModeloSubidas::nuevaSubida(new Subida($datos->titulo, $datos->descripcion, $datos->enlaces, $datos->acortadores));
         return json($idSubida);
     }
 
