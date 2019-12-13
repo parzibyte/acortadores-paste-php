@@ -115,9 +115,8 @@
                     payload.acortadores = payload.acortadores.map(a => a.id);
                     ParzibyteHttp.post("/subida", payload)
                         .then(r => {
-                            console.log("A ver: ", r);
+                            window.location.href = `${window.URL_RAIZ}/subidas`;
                         });
-                    console.log("Guardamos: ", this.detalles);
                 },
             },
             mounted() {

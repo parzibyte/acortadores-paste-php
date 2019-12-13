@@ -25,7 +25,9 @@ class ModeloSubidas
 
     public static function obtenerListado()
     {
-        return BD::obtener()->query("SELECT id, titulo, token, descripcion, fecha FROM subidas")->fetchAll(PDO::FETCH_OBJ);
+        return BD::obtener()
+            ->query("SELECT id, titulo, token, descripcion, fecha FROM subidas ORDER BY fecha DESC")
+            ->fetchAll(PDO::FETCH_OBJ);
     }
 
 

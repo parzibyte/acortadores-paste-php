@@ -75,6 +75,7 @@
             </div>
             <div class="col-12">
                 <button @click="guardar()" class="btn-success btn">Guardar</button>
+                <a href="{{ URL_RAIZ }}/subidas" class="btn-warning btn">Volver</a>
             </div>
         </div>
     </main>
@@ -131,8 +132,8 @@
                         leyenda: enlace.leyenda,
                     }));
                     ParzibyteHttp.put("/subida", payload)
-                        .then(r => {
-                            console.log("A ver: ", r);
+                        .then(() => {
+                            window.location.href = window.URL_RAIZ + "/subidas";
                         });
                 },
             },
