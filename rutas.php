@@ -72,7 +72,9 @@ $enrutador
         $enrutadorVistasPrivadas->get("enlaces", ["Parzibyte\Controladores\ControladorEnlaces", "index"]);
         $enrutadorVistasPrivadas->get("acortadores_disponibles", ["Parzibyte\Controladores\ControladorSubidas", "obtenerAcortadoresDisponibles"]);
         $enrutadorVistasPrivadas->get("enlaces/agregar", ["Parzibyte\Controladores\ControladorEnlaces", "agregar"]);
-        $enrutadorVistasPrivadas->get("subidas", ["Parzibyte\Controladores\ControladorSubidas", "formularioAgregar"]);
+        $enrutadorVistasPrivadas->get("subidas", ["Parzibyte\Controladores\ControladorSubidas", "verSubidas"]);
+        $enrutadorVistasPrivadas->get("subidas/json", ["Parzibyte\Controladores\ControladorSubidas", "listadoDeSubidas"]);
+        $enrutadorVistasPrivadas->get("subidas/agregar", ["Parzibyte\Controladores\ControladorSubidas", "formularioAgregar"]);
         $enrutadorVistasPrivadas->get("subida/{idSubida}/editar", ["Parzibyte\Controladores\ControladorSubidas", "editarSubida"]);
         $enrutadorVistasPrivadas->get("subida/{idSubida}", ["Parzibyte\Controladores\ControladorSubidas", "detallesDeSubida"]);
         $enrutadorVistasPrivadas->post("subida", ["Parzibyte\Controladores\ControladorSubidas", "agregarSubida"]);

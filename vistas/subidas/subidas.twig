@@ -1,0 +1,70 @@
+{% extends "master.twig" %}
+{% block titulo %}Subidas
+{% endblock %}
+{% block contenido %}
+    <main class="container-fluid" id="subidasApp">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center">Subidas</h1>
+            </div>
+            <div class="col-12">
+                <a class="btn btn-success mb-2" href="{{ URL_RAIZ }}/subidas/agregar">Agregar</a>
+            </div>
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Descripción</th>
+                        <th>Fecha</th>
+                        <th>Opciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% verbatim %}
+                        <tr v-for="(subida, indice) in subidas" :key="indice">
+                            <td>{{ subida.titulo }}</td>
+                            <td>{{ subida.descripcion }}</td>
+                            <td>{{ subida.fecha }}</td>
+                            <td>
+                                <a href="#" class="btn btn-info" @click="detallesDe(subida.id)">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                                <a href="#" class="btn btn-success" @click="detallesDe(subida.id)">
+                                    <i class="fa fa-copy"></i>
+                                </a>
+                                <a href="#" class="btn btn-danger" @click="detallesDe(subida.id)">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+{% endverbatim %}
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <script type="text/javascript">
+        new Vue({
+            el: "#subidasApp",
+            data: () => ({
+                subidas: [],
+            }),
+            methods: {
+                obtenerSubidas() {
+                    return ParzibyteHttp.get("/subidas/json")
+                        .then(subidas => {
+                            console.log({subidas})
+                            this.subidas = subidas;
+                        })
+                },
+                detallesDe(idSubida) {
+                    window.location.href = `${window.URL_RAIZ}/subida/${idSubida}/editar`;
+                }
+            },
+            mounted() {
+                this.obtenerSubidas();
+            }
+        });
+    </script>
+{% endblock %}

@@ -20,6 +20,14 @@ class ControladorSubidas
     {
         return view("subidas/agregar_subida");
     }
+    public static function verSubidas()
+    {
+        return view("subidas/subidas");
+    }
+    public static function listadoDeSubidas()
+    {
+        return json(ModeloSubidas::obtenerListado());
+    }
 
     public static function agregarSubida()
     {

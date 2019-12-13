@@ -23,6 +23,11 @@ class ModeloSubidas
         return Subida::porId($id)->conEnlaces(true)->conAcortadores();
     }
 
+    public static function obtenerListado()
+    {
+        return BD::obtener()->query("SELECT id, titulo, token, descripcion, fecha FROM subidas")->fetchAll(PDO::FETCH_OBJ);
+    }
+
 
     public static function obtenerSubidaPorToken($token)
     {
