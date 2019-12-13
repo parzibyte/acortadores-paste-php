@@ -98,4 +98,6 @@ if (Comun::env("PERMITIR_REGISTRO_USUARIOS", true)) {
     $enrutador->get("/usuarios/reenviar-correo", ["Parzibyte\Controladores\ControladorUsuarios", "solicitarReenvioCorreo"]);
     $enrutador->post("/usuarios/reenviar-correo", ["Parzibyte\Controladores\ControladorUsuarios", "reenviarCorreo"]);
 }
+# Por último, cualquier ruta supone que quieren ver la subida con token
+$enrutador->get("/{token}", ["Parzibyte\Controladores\ControladorSubidas", "verSubidaPublicamente"]);
 return $enrutador;

@@ -30,7 +30,7 @@
                                 <a href="#" class="btn btn-info" @click="detallesDe(subida.id)">
                                     <i class="fa fa-eye"></i>
                                 </a>
-                                <a href="#" class="btn btn-success" @click="detallesDe(subida.id)">
+                                <a href="#" class="btn btn-success" @click="copiar(subida)">
                                     <i class="fa fa-copy"></i>
                                 </a>
                                 <a href="#" class="btn btn-danger" @click="detallesDe(subida.id)">
@@ -54,13 +54,32 @@
                 obtenerSubidas() {
                     return ParzibyteHttp.get("/subidas/json")
                         .then(subidas => {
-                            console.log({subidas})
                             this.subidas = subidas;
                         })
                 },
                 detallesDe(idSubida) {
                     window.location.href = `${window.URL_RAIZ}/subida/${idSubida}/editar`;
-                }
+                },
+                copiarTexto(texto) {
+                    if (!navigator.clipboard) this.copiarSiNoSoporta(texto);
+                    navigator.clipboard.writeText(texto)
+                        .then(() => {
+                            Vue.toasted.success("Enlace copiado al portapapeles", {
+                                duration: 1000
+                            });
+                        })
+                        .catch(error => {
+                            this.copiarSiNoSoporta(texto);
+                        });
+                },
+                copiarSiNoSoporta(texto) {
+                    prompt("Presiona CTRL + C y después Enter", texto);
+                },
+                copiar(subida) {
+                    let enlace = window.URL_RAIZ + `/${subida.token}`;
+                    console.log({enlace});
+                    this.copiarTexto(enlace)
+                },
             },
             mounted() {
                 this.obtenerSubidas();
