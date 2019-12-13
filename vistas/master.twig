@@ -26,11 +26,6 @@
         {% block titulo %}{% endblock %}
         -
         {{ NOMBRE_APLICACION }}</title>
-    <script src="{{ URL_DIRECTORIO_PUBLICO }}/js/vue.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        window.URL_RAIZ = "{{ URL_RAIZ }}";
-    </script>
-    <script src="{{ URL_DIRECTORIO_PUBLICO }}/js/http.js" type="text/javascript"></script>
     <link rel="stylesheet" href="{{ URL_DIRECTORIO_PUBLICO }}/css/fa.min.css">
     <link type="text/css" rel="stylesheet" href="{{ URL_DIRECTORIO_PUBLICO }}/css/bootstrap.min.css"/>
     <style>
@@ -44,6 +39,14 @@
 </head>
 <body>
 {% include "componentes/navbar.twig" %}
+
+<script src="{{ URL_DIRECTORIO_PUBLICO }}/js/vue.js" type="text/javascript"></script>
+<script src="{{ URL_DIRECTORIO_PUBLICO }}/js/vue-toasted.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    Vue.use(Toasted);
+    window.URL_RAIZ = "{{ URL_RAIZ }}";
+</script>
+<script src="{{ URL_DIRECTORIO_PUBLICO }}/js/http.js" type="text/javascript"></script>
 {% block contenido %}{% endblock %}
 <script type="text/javascript">
     // Tomado de https://github.com/parzibyte/cotizaciones_web/blob/master/js/cotizaciones.js#L2
@@ -61,6 +64,7 @@
         }
     });
 </script>
+
 {% include "componentes/footer.twig" %}
 </body>
 </html>

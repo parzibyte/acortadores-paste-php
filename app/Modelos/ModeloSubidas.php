@@ -23,6 +23,11 @@ class ModeloSubidas
         return Subida::porId($id)->conEnlaces(true)->conAcortadores();
     }
 
+    public static function obtenerSubidaPublicaPorToken($token)
+    {
+        return Subida::porToken($token)->conEnlaces();
+    }
+
     public static function obtenerListado()
     {
         return BD::obtener()

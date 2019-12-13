@@ -15,15 +15,24 @@ use Parzibyte\Clases\Subida;
 class ControladorSubidas
 {
 
+    public static function verSubidaPublicamente($token)
+    {
+        return view("subidas/ver_subida_publica", [
+            "subida" => ModeloSubidas::obtenerSubidaPublicaPorToken($token),
+        ]);
+    }
+
 
     public static function formularioAgregar()
     {
         return view("subidas/agregar_subida");
     }
+
     public static function verSubidas()
     {
         return view("subidas/subidas");
     }
+
     public static function listadoDeSubidas()
     {
         return json(ModeloSubidas::obtenerListado());

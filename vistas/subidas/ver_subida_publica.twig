@@ -1,0 +1,30 @@
+{% extends "master.twig" %}
+{% block titulo %}{{ subida.titulo }}
+{% endblock %}
+{% block contenido %}
+    <main class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h1>{{ subida.titulo }}</h1>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="card-title">Actualizado por última vez: {{ subida.fecha }}</h2>
+                        <pre>{{ subida.descripcion }}</pre>
+                        <h2>Enlaces de descarga</h2>
+                        {% for enlace in subida.enlaces %}
+                            <a rel="nofollow" target="_blank" href="{{ enlace.enlace_acortado }}"
+                               class="btn btn-primary mb-2">
+                                <i class="fa fa-download"></i>
+                                {{ enlace.leyenda }}
+                            </a>
+                            <br>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
