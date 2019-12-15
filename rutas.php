@@ -77,6 +77,7 @@ $enrutador
         $enrutadorVistasPrivadas->get("subidas/agregar", ["Parzibyte\Controladores\ControladorSubidas", "formularioAgregar"]);
         $enrutadorVistasPrivadas->get("subida/{idSubida}/editar", ["Parzibyte\Controladores\ControladorSubidas", "editarSubida"]);
         $enrutadorVistasPrivadas->get("subida/{idSubida}", ["Parzibyte\Controladores\ControladorSubidas", "detallesDeSubida"]);
+        $enrutadorVistasPrivadas->delete("subida/{idSubida}", ["Parzibyte\Controladores\ControladorSubidas", "eliminarSubida"]);
         $enrutadorVistasPrivadas->post("subida", ["Parzibyte\Controladores\ControladorSubidas", "agregarSubida"]);
         $enrutadorVistasPrivadas->put("subida", ["Parzibyte\Controladores\ControladorSubidas", "actualizarSubida"]);
     });

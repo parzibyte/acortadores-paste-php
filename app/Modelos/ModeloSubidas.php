@@ -18,6 +18,14 @@ use PDO;
 class ModeloSubidas
 {
 
+    public static function eliminarPorId($id)
+    {
+        $bd = BD::obtener();
+        $sentencia = $bd->prepare("DELETE FROM subidas WHERE id = ?");
+        return $sentencia->execute([$id,
+        ]);
+    }
+
     public static function obtenerSubidaPorId($id)
     {
         return Subida::porId($id)->conEnlaces(true)->conAcortadores();

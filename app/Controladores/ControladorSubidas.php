@@ -22,6 +22,11 @@ class ControladorSubidas
         ]);
     }
 
+    public static function eliminarSubida($idSubida)
+    {
+        return json(ModeloSubidas::eliminarPorId($idSubida));
+    }
+
 
     public static function formularioAgregar()
     {

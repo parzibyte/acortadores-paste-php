@@ -36,7 +36,7 @@
                                 <a href="#" class="btn btn-success" @click="abrirEnTab(subida)">
                                     <i class="fa fa-external-link-alt"></i>
                                 </a>
-                                <a href="#" class="btn btn-danger" @click="detallesDe(subida.id)">
+                                <a href="#" class="btn btn-danger" @click="eliminar(subida)">
                                     <i class="fa fa-trash"></i>
                                 </a>
                             </td>
@@ -91,6 +91,33 @@
                 },
                 enlaceAPartirDeToken(subida) {
                     return window.URL_RAIZ + `/${subida.token}`;
+                },
+                eliminar(subida) {
+                    Swal.fire({
+                        title: subida.titulo,
+                        html: "Todos los enlaces y configuraciones se van a eliminar. Esto no se puede deshacer<br><strong>¿Eliminar?</strong>",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: "Sí, eliminar",
+                        cancelButtonText: "Cancelar",
+                    }).then((result) => {
+                        if (!result.value) return;
+                        ParzibyteHttp.delete("/subida/" + subida.id)
+                            .then(r => {
+                                if (r) {
+                                    Vue.toasted.success("Eliminada correctamente", {
+                                        duration: 1500
+                                    });
+                                } else {
+                                    Vue.toasted.error("Error eliminando. Reintente", {
+                                        duration: 1500
+                                    });
+                                }
+                                this.obtenerSubidas();
+                            });
+                    })
                 }
             },
             mounted() {
