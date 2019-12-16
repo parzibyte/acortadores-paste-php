@@ -11,39 +11,41 @@
                 <a class="btn btn-success mb-2" href="{{ URL_RAIZ }}/subidas/agregar">Agregar</a>
             </div>
             <div class="col-12">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Título</th>
-                        <th>Descripción</th>
-                        <th>Fecha</th>
-                        <th>Opciones</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% verbatim %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th style="max-width:300px;">Descripción</th>
+                            <th>Fecha</th>
+                            <th>Opciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% verbatim %}
                         <tr v-for="(subida, indice) in subidas" :key="indice">
                             <td>{{ subida.titulo }}</td>
-                            <td>{{ subida.descripcion }}</td>
+                            <td style="max-width:300px;">{{ subida.descripcion }}</td>
                             <td>{{ subida.fecha }}</td>
                             <td>
-                                <a href="#" class="btn btn-info" @click="detallesDe(subida.id)">
+                                <a href="#" class="btn btn-info mt-2" @click="detallesDe(subida.id)">
                                     <i class="fa fa-eye"></i>
                                 </a>
-                                <a href="#" class="btn btn-success" @click="copiar(subida)">
+                                <a href="#" class="btn btn-success mt-2" @click="copiar(subida)">
                                     <i class="fa fa-copy"></i>
                                 </a>
-                                <a href="#" class="btn btn-success" @click="abrirEnTab(subida)">
+                                <a href="#" class="btn btn-success mt-2" @click="abrirEnTab(subida)">
                                     <i class="fa fa-external-link-alt"></i>
                                 </a>
-                                <a href="#" class="btn btn-danger" @click="eliminar(subida)">
+                                <a href="#" class="btn btn-danger mt-2" @click="eliminar(subida)">
                                     <i class="fa fa-trash"></i>
                                 </a>
                             </td>
 {% endverbatim %}
-                    </tr>
-                    </tbody>
-                </table>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </main>
