@@ -71,7 +71,21 @@
                 </div>
             </div>
             <div class="col-12">
-                <button @click="guardar()" class="btn-success btn">Guardar</button>
+                <div v-if="errores.length > 0" class="alert alert-danger">
+                    <ul>
+                        {% verbatim %}
+                        <li v-for="error in errores">{{ error }}</li>
+                        {% endverbatim %}
+                    </ul>
+                </div>
+                <button :disabled="cargando" @click="guardar()" class="btn-success btn">
+                    <template v-if="cargando">
+                        <i class="fa fa-spin fa-spinner"></i> Guardando
+                    </template>
+                    <template v-if="!cargando">
+                        Guardar
+                    </template>
+                </button>
                 <a class="btn btn-warning" href="{{ URL_RAIZ }}/subidas">Ver subidas</a>
             </div>
         </div>
@@ -80,7 +94,9 @@
         new Vue({
             el: "#agregarSubidaApp",
             data: () => ({
+                cargando: false,
                 acortadoresDisponibles: [],
+                errores: [],
                 detalles: {
                     titulo: "",
                     descripcion: "",
@@ -110,20 +126,38 @@
                 eliminarEnlace(indice) {
                     this.detalles.enlaces.splice(indice, 1);
                 },
+                validar() {
+                    this.errores = [];
+                    if (!this.detalles.titulo) {
+                        this.errores.push("Proporciona un título");
+                    }
+                    this.detalles.enlaces.forEach((enlace, indice) => {
+                        if (!enlace.leyenda || !enlace.enlace) {
+                            this.errores.push(`No puedes dejar enlaces / leyendas sin llenar (fila ${indice + 1})`);
+                        }
+                    });
+                    return this.errores.length <= 0;
+
+                },
                 guardar() {
+                    if (!this.validar()) return;
+                    this.cargando = true;
                     const payload = Object.assign({}, this.detalles);
                     payload.acortadores = payload.acortadores.map(a => a.id);
                     ParzibyteHttp.post("/subida", payload)
                         .then(r => {
+                            this.cargando = false;
                             window.location.href = `${window.URL_RAIZ}/subidas`;
                         });
                 },
             },
             mounted() {
+                this.cargando = true;
                 this.obtenerAcortadoresDisponibles()
                     .then(() => {
                         this.agregarEnlace();
                         this.agregarAcortador();
+                        this.cargando = false;
                     });
             }
         });
