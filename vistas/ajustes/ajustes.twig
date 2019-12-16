@@ -1,0 +1,26 @@
+{% extends "master.twig" %}
+{% block titulo %}Ajustes
+{% endblock %}
+{% block contenido %}
+    <main class="container-fluid">
+        <div class="row">
+            <div class="col-4">
+                <h1>Ajustes</h1>
+                <div class="form-group">
+                    <form action="{{ URL_RAIZ }}/ajustes" method="POST">
+                        <label for="enlace">Enlace para membresía premium</label>
+                        <input class="form-control" placeholder="mailto:parzibyte@gmail.com" id="enlace" name="enlace"
+                               type="text">
+                        <small class="form-text text-muted">A donde se redireccionan los usuarios que quieren comprar
+                            una
+                            membresía (puede ser tu web, un enlace a tu Telegram, a tu correo, etcétera)</small>
+                    </form>
+                </div>
+            </div>
+            <div class="col-6">
+                <h1>Herramientas</h1>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
