@@ -56,7 +56,7 @@
                                        placeholder="Por ejemplo, parte 1"></td>
                             <td><input v-model="enlace.enlace_original" type="text" class="form-control"
                                        placeholder="https://parzibyte.me/blog"></td>
-                            <td><input readonly v-model="enlace.enlace_acortado" type="text" class="form-control"
+                            <td><input readonly v-model="enlace.enlace_acortado || 'No disponible'" type="text" class="form-control"
                                        placeholder="https://parzibyte.me/blog"></td>
                             <td>
                                 <button v-show="detalles.enlaces.length > 1" @click="eliminarEnlace(i)"
@@ -74,7 +74,21 @@
                 </div>
             </div>
             <div class="col-12">
-                <button @click="guardar()" class="btn-success btn">Guardar</button>
+                <div v-if="errores.length > 0" class="alert alert-danger">
+                    <ul>
+                        {% verbatim %}
+                        <li v-for="error in errores">{{ error }}</li>
+                        {% endverbatim %}
+                    </ul>
+                </div>
+                <button :disabled="cargando" @click="guardar()" class="btn-success btn">
+                    <template v-if="cargando">
+                        <i class="fa fa-spin fa-spinner"></i> Guardando
+                    </template>
+                    <template v-if="!cargando">
+                        Guardar
+                    </template>
+                </button>
                 <a href="{{ URL_RAIZ }}/subidas" class="btn-warning btn">Volver</a>
             </div>
         </div>
@@ -84,6 +98,8 @@
         new Vue({
             el: "#editarSubidaApp",
             data: () => ({
+                cargando: false,
+                errores: [],
                 acortadoresDisponibles: [],
                 detalles: {
                     id: null,
@@ -96,6 +112,19 @@
                 }
             }),
             methods: {
+                validar() {
+                    this.errores = [];
+                    if (!this.detalles.titulo) {
+                        this.errores.push("Proporciona un título");
+                    }
+                    this.detalles.enlaces.forEach((enlace, indice) => {
+                        if (!enlace.leyenda || !enlace.enlace_original) {
+                            this.errores.push(`No puedes dejar enlaces / leyendas sin llenar (fila ${indice + 1})`);
+                        }
+                    });
+                    return this.errores.length <= 0;
+
+                },
                 obtenerAcortadoresDisponibles() {
                     return ParzibyteHttp.get("/acortadores_disponibles")
                         .then(acortadores => {
@@ -125,6 +154,8 @@
                     this.detalles.enlaces.splice(indice, 1);
                 },
                 guardar() {
+                    if (!this.validar()) return;
+                    this.cargando = true;
                     const payload = Object.assign({}, this.detalles);
                     payload.acortadores = payload.acortadores.map(a => a.id);
                     payload.enlaces = payload.enlaces.map(enlace => ({
@@ -133,13 +164,18 @@
                     }));
                     ParzibyteHttp.put("/subida", payload)
                         .then(() => {
+                            this.cargando = false;
                             window.location.href = window.URL_RAIZ + "/subidas";
                         });
                 },
             },
             mounted() {
+                this.cargando = true;
                 this.obtenerAcortadoresDisponibles()
-                    .then(this.obtenerDetallesDeSubida);
+                    .then(this.obtenerDetallesDeSubida)
+                    .then(() => {
+                        this.cargando = false;
+                    })
             }
         });
     </script>
