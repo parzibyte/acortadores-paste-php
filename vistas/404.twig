@@ -1,0 +1,18 @@
+{% extends "master.twig" %}
+{% block titulo %}No encontrado
+{% endblock %}
+{% block contenido %}
+    <main class="container-fluid " role="main">
+        <div class="row">
+            <div class="col-12 text-center">
+
+                <h1 class="text-center">No encontrado</h1>
+                <p class="h5">Lo sentimos; la página que buscas no está disponible. Puede que se haya movido, eliminado o esté
+                    temporalmente fuera de línea</p>
+
+                <img src="{{ URL_DIRECTORIO_PUBLICO }}/img/404.jpg" alt="No encontrado"
+                     class="img-fluid">
+            </div>
+        </div>
+    </main>
+{% endblock %}

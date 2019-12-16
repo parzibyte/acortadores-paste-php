@@ -23,6 +23,10 @@ class ControladorSubidas
     public static function verSubidaPublicamente($token)
     {
         $subida = Subida::porToken($token);
+        if (!$subida) {
+            header("HTTP/1.0 404 Not Found");
+            return view("404");
+        }
         $conEnlacesOriginales = false;
         $diasRestantes = -1;
         $idUsuario = SesionService::leer("idUsuario");

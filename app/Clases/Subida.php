@@ -52,12 +52,14 @@ class Subida
         $objeto = $sentencia->fetch(PDO::FETCH_OBJ);
         return new Subida($objeto->titulo, $objeto->descripcion, [], [], $objeto->token, $objeto->fecha, $objeto->id);
     }
+
     public static function porToken($token)
     {
         $sentencia = BD::obtener()
             ->prepare("SELECT id, titulo, token, descripcion, fecha FROM subidas WHERE token = ? limit 1");
         $sentencia->execute([$token,]);
         $objeto = $sentencia->fetch(PDO::FETCH_OBJ);
+        if (!$objeto) return null;
         return new Subida($objeto->titulo, $objeto->descripcion, [], [], $objeto->token, $objeto->fecha, $objeto->id);
     }
 
