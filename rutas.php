@@ -60,6 +60,7 @@ $enrutador
         });
         $enrutadorVistasPrivadas
             ->get("/ajustes", ["Parzibyte\Controladores\ControladorAjustes", "index"])
+            ->post("/ajustes", ["Parzibyte\Controladores\ControladorAjustes", "guardar"])
             ->get("/usuarios", ["Parzibyte\Controladores\ControladorUsuarios", "index"])
             ->get("/usuarios/agregar", ["Parzibyte\Controladores\ControladorUsuarios", "agregar"])
             ->get("/usuarios/editar/{idUsuario}", ["Parzibyte\Controladores\ControladorUsuarios", "formularioEditar"])

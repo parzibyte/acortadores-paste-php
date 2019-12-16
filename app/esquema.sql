@@ -78,3 +78,13 @@ CREATE TABLE acortadores_subidas
     id_acortador INT(8)          NOT NULL,
     FOREIGN KEY (id_subida) REFERENCES subidas (id) ON DELETE CASCADE
 );
+
+
+CREATE TABLE ajustes
+(
+    clave VARCHAR(255) NOT NULL UNIQUE,
+    valor VARCHAR(255) NOT NULL
+);
+
+INSERT INTO ajustes(clave, valor)
+VALUES ('ENLACE_MEMBRESIA', '#');

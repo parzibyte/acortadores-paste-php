@@ -9,6 +9,7 @@
 namespace Parzibyte\Controladores;
 
 
+use Parzibyte\Modelos\ModeloAjustes;
 use Parzibyte\Modelos\ModeloSubidas;
 use Parzibyte\Clases\Subida;
 use Parzibyte\Modelos\ModeloUsuarios;
@@ -32,6 +33,7 @@ class ControladorSubidas
         }
         return view("subidas/ver_subida_publica", [
             "diasRestantes" => $diasRestantes,
+            "enlace" => ModeloAjustes::obtener("ENLACE_MEMBRESIA"),
             "conOriginales" => $conEnlacesOriginales,
             "subida" => $subida->conEnlaces($conEnlacesOriginales),
         ]);
