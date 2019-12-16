@@ -8,9 +8,11 @@
                 <h1>Ajustes</h1>
                 <form action="{{ URL_RAIZ }}/ajustes" method="POST">
                     {% include "componentes/sesion_flash.twig" %}
+                    {% include "componentes/token_csrf.twig" %}
                     <div class="form-group">
                         <label for="enlace">Enlace para membresía premium</label>
-                        <input value="{{ enlace }}" class="form-control" placeholder="mailto:parzibyte@gmail.com" id="enlace" name="enlace"
+                        <input value="{{ enlace }}" class="form-control" placeholder="mailto:parzibyte@gmail.com"
+                               id="enlace" name="enlace"
                                type="text">
                         <small class="form-text text-muted">A donde se redireccionan los usuarios que quieren comprar
                             una
@@ -18,9 +20,6 @@
                     </div>
                     <button class="btn btn-success">Guardar</button>
                 </form>
-            </div>
-            <div class="col-6">
-                <h1>Herramientas</h1>
             </div>
         </div>
     </main>

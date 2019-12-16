@@ -55,12 +55,12 @@ $enrutador
         $enrutadorVistasPrivadas->group(["before" => ["token_csrf"]], function (RouteCollector $enrutadorToken) {
             $enrutadorToken
                 ->post("/usuarios/eliminar", ["Parzibyte\Controladores\ControladorUsuarios", "eliminar"])
+                ->post("/ajustes", ["Parzibyte\Controladores\ControladorAjustes", "guardar"])
                 ->post("/usuarios/guardar", ["Parzibyte\Controladores\ControladorUsuarios", "guardar"])
                 ->post("/usuarios/guardarCambios", ["Parzibyte\Controladores\ControladorUsuarios", "guardarCambios"]);
         });
         $enrutadorVistasPrivadas
             ->get("/ajustes", ["Parzibyte\Controladores\ControladorAjustes", "index"])
-            ->post("/ajustes", ["Parzibyte\Controladores\ControladorAjustes", "guardar"])
             ->get("/usuarios", ["Parzibyte\Controladores\ControladorUsuarios", "index"])
             ->get("/usuarios/agregar", ["Parzibyte\Controladores\ControladorUsuarios", "agregar"])
             ->get("/usuarios/editar/{idUsuario}", ["Parzibyte\Controladores\ControladorUsuarios", "formularioEditar"])
