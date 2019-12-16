@@ -82,16 +82,16 @@ $enrutador
 $enrutador->post("/login", ["Parzibyte\Controladores\ControladorLogin", "login"]);
 $enrutador->get("/login", ["Parzibyte\Controladores\ControladorLogin", "index"]);
 $enrutador->get("/", ["Parzibyte\Controladores\ControladorLogin", "index"]);
-if (Comun::env("PERMITIR_REGISTRO_USUARIOS", true)) {
+# Cuando quieren resetear
+$enrutador->get("/usuarios/solicitar-nueva-password", ["Parzibyte\Controladores\ControladorUsuarios", "formularioSolicitarNuevaPassword"]);
+$enrutador->post("/usuarios/solicitar-nueva-password", ["Parzibyte\Controladores\ControladorUsuarios", "solicitarNuevaPassword"]);
+# Cuando ya les llegó el correo
+$enrutador->get("/usuarios/restablecer-password/{token}", ["Parzibyte\Controladores\ControladorUsuarios", "formularioRestablecerPassword"]);
+$enrutador->post("/usuarios/restablecer-password", ["Parzibyte\Controladores\ControladorUsuarios", "restablecerPassword"]);
+if (PERMITIR_REGISTRO_USUARIOS) {
     $enrutador->get("/registro", ["Parzibyte\Controladores\ControladorUsuarios", "registrar"]);
     $enrutador->post("/usuarios/registro", ["Parzibyte\Controladores\ControladorUsuarios", "registro"]);
     $enrutador->get("/usuarios/verificar/{token}", ["Parzibyte\Controladores\ControladorUsuarios", "verificar"]);
-    # Cuando quieren resetear
-    $enrutador->get("/usuarios/solicitar-nueva-password", ["Parzibyte\Controladores\ControladorUsuarios", "formularioSolicitarNuevaPassword"]);
-    $enrutador->post("/usuarios/solicitar-nueva-password", ["Parzibyte\Controladores\ControladorUsuarios", "solicitarNuevaPassword"]);
-    # Cuando ya les llegó el correo
-    $enrutador->get("/usuarios/restablecer-password/{token}", ["Parzibyte\Controladores\ControladorUsuarios", "formularioRestablecerPassword"]);
-    $enrutador->post("/usuarios/restablecer-password", ["Parzibyte\Controladores\ControladorUsuarios", "restablecerPassword"]);
     # Reenviar correo de registro
     $enrutador->get("/usuarios/reenviar-correo", ["Parzibyte\Controladores\ControladorUsuarios", "solicitarReenvioCorreo"]);
     $enrutador->post("/usuarios/reenviar-correo", ["Parzibyte\Controladores\ControladorUsuarios", "reenviarCorreo"]);

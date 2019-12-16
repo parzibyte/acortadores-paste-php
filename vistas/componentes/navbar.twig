@@ -28,9 +28,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ URL_RAIZ }}/login">Login</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ URL_RAIZ }}/registro">Registro</a>
-                </li>
+                {% if PERMITIR_REGISTRO_USUARIOS %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ URL_RAIZ }}/registro">Registro</a>
+                    </li>
+                {% endif %}
             {% endif %}
         </ul>
         {% if USUARIO_LOGUEADO %}

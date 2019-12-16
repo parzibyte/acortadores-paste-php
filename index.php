@@ -23,6 +23,7 @@ define("DIRECTORIO_RAIZ", __DIR__);
 define("DIRECTORIO_APLICACION", DIRECTORIO_RAIZ . "/app");
 define("RUTA_LOGS", __DIR__ . DIRECTORY_SEPARATOR . "logs");
 define("URL_RAIZ", Comun::env("URL_RAIZ"));
+define("PERMITIR_REGISTRO_USUARIOS", Comun::env("PERMITIR_REGISTRO_USUARIOS", true));
 define("URL_DIRECTORIO_PUBLICO", URL_RAIZ . "/public");
 define("RUTA_API", URL_RAIZ . "/api");
 define("NOMBRE_APLICACION", "Acortadores & Paste");

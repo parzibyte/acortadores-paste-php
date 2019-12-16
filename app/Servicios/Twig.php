@@ -31,6 +31,7 @@ class Twig
         $twig->addGlobal("USUARIO_LOGUEADO", SesionService::leer("correoUsuario"));
         $usuario = ModeloUsuarios::uno(SesionService::leer("idUsuario"));
         $twig->addGlobal("USUARIO_ADMIN", $usuario != null && $usuario->administrador);
+        $twig->addGlobal("PERMITIR_REGISTRO_USUARIOS", PERMITIR_REGISTRO_USUARIOS);
         $twig->addFunction(new TwigFunction("sesion_flash", function ($clave) {
             return SesionService::flash($clave);
         }));
