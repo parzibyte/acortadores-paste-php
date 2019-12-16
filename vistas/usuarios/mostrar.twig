@@ -18,7 +18,8 @@
                         <thead>
                         <tr>
                             <th>Correo</th>
-                            <th>¿Administrador?</th>
+                            <th>Administrador</th>
+                            <th>Fecha de vencimiento</th>
                             <th>Eliminar</th>
                         </tr>
                         </thead>
@@ -31,23 +32,31 @@
                                         <span class="badge badge-success">
                                             <i class="fa fa-check"></i>
                                         </span>
-                                        <a title="Remover permiso" class="text-danger ml-2"
-                                           href="{{ URL_RAIZ }}/usuarios/removerAdministrador/{{ usuario.id }}?token_csrf={{ token }}">
-                                            <i class="fa fa-times-circle"></i>
-                                        </a>
                                     {% else %}
                                         <span class="badge badge-danger">
                                             <i class="fa fa-times"></i>
                                         </span>
-                                        <a title="Asignar permiso" class="text-success ml-2"
-                                           href="{{ URL_RAIZ }}/usuarios/hacerAdministrador/{{ usuario.id }}">
-                                            <i class="fa fa-check-circle"></i>
-                                        </a>
                                     {% endif %}
 
                                 </td>
                                 <td>
-                                    <a class="btn btn-warning" href="{{ URL_RAIZ }}/usuarios/eliminar/{{ usuario.id }}">
+
+                                    {% set d = dias_restantes_hasta_hoy(usuario.fecha_vencimiento_pago) %}
+                                    {% if(d < 0) %}
+                                        <strong>Vencido</strong>
+                                    {% elseif(d == 0) %}
+                                        <strong>Vence hoy</strong>
+                                    {% else %}
+                                        Días restantes: <strong>{{ d }}</strong>
+                                    {% endif %}
+                                    <small>
+                                        ({{ usuario.fecha_vencimiento_pago }})
+                                    </small>
+                                    <br>
+                                    <a href="{{ URL_RAIZ }}/usuarios/editar/{{ usuario.id }}">Administrar</a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-danger" href="{{ URL_RAIZ }}/usuarios/eliminar/{{ usuario.id }}">
                                         <i class="fa fa-trash"></i>
                                     </a>
                                 </td>

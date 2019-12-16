@@ -54,18 +54,15 @@ $enrutador
     ->group(["before" => ["administrador"]], function (RouteCollector $enrutadorVistasPrivadas) {
         $enrutadorVistasPrivadas->group(["before" => ["token_csrf"]], function (RouteCollector $enrutadorToken) {
             $enrutadorToken
-                ->get(
-                    "/usuarios/removerAdministrador/{idUsuario}",
-                    ["Parzibyte\Controladores\ControladorUsuarios", "removerAdministrador"]
-                )
                 ->post("/usuarios/eliminar", ["Parzibyte\Controladores\ControladorUsuarios", "eliminar"])
-                ->post("/usuarios/guardar", ["Parzibyte\Controladores\ControladorUsuarios", "guardar"]);
+                ->post("/usuarios/guardar", ["Parzibyte\Controladores\ControladorUsuarios", "guardar"])
+                ->post("/usuarios/guardarCambios", ["Parzibyte\Controladores\ControladorUsuarios", "guardarCambios"]);
         });
         $enrutadorVistasPrivadas
             ->get("/ajustes", ["Parzibyte\Controladores\ControladorAjustes", "index"])
             ->get("/usuarios", ["Parzibyte\Controladores\ControladorUsuarios", "index"])
             ->get("/usuarios/agregar", ["Parzibyte\Controladores\ControladorUsuarios", "agregar"])
-            ->get("/usuarios/hacerAdministrador/{idUsuario}", ["Parzibyte\Controladores\ControladorUsuarios", "hacerAdministrador"])
+            ->get("/usuarios/editar/{idUsuario}", ["Parzibyte\Controladores\ControladorUsuarios", "formularioEditar"])
             ->get("/usuarios/eliminar/{idUsuario}", ["Parzibyte\Controladores\ControladorUsuarios", "confirmarEliminacion"]);
 
         # Rutas de enlaces

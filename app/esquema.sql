@@ -14,10 +14,11 @@ CREATE TABLE IF NOT EXISTS sesiones_usuarios
 
 CREATE TABLE usuarios
 (
-    id              BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    administrador   BOOLEAN         NOT NULL DEFAULT FALSE,
-    correo          VARCHAR(255)    NOT NULL UNIQUE,
-    palabra_secreta VARCHAR(255)    NOT NULL,
+    id                     BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    administrador          BOOLEAN         NOT NULL DEFAULT FALSE,
+    fecha_vencimiento_pago DATE            NOT NULL DEFAULT '1970-01-01',
+    correo                 VARCHAR(255)    NOT NULL UNIQUE,
+    palabra_secreta        VARCHAR(255)    NOT NULL,
     PRIMARY KEY (id)
 );
 

@@ -40,6 +40,9 @@ class Twig
         $twig->addFunction(new TwigFunction("_", function ($id, $parametros = []) {
             return Traductor::traducir($id, $parametros);
         }));
+        $twig->addFunction(new TwigFunction("dias_restantes_hasta_hoy", function ($fecha) {
+            return Comun::diasRestantesHastaHoy($fecha);
+        }));
         return $twig;
     }
 }

@@ -11,14 +11,29 @@ namespace Parzibyte\Controladores;
 
 use Parzibyte\Modelos\ModeloSubidas;
 use Parzibyte\Clases\Subida;
+use Parzibyte\Modelos\ModeloUsuarios;
+use Parzibyte\Servicios\Comun;
+use Parzibyte\Servicios\Sesion;
+use Parzibyte\Servicios\SesionService;
 
 class ControladorSubidas
 {
 
     public static function verSubidaPublicamente($token)
     {
+        $subida = Subida::porToken($token);
+        $conEnlacesOriginales = false;
+        $diasRestantes = -1;
+        $idUsuario = SesionService::leer("idUsuario");
+        if ($idUsuario != null) {
+            $usuario = ModeloUsuarios::uno($idUsuario);
+            $diasRestantes = Comun::diasRestantesHastaHoy($usuario->fecha_vencimiento_pago);
+            $conEnlacesOriginales = $diasRestantes >= 0 || $usuario->administrador;
+        }
         return view("subidas/ver_subida_publica", [
-            "subida" => ModeloSubidas::obtenerSubidaPublicaPorToken($token),
+            "diasRestantes" => $diasRestantes,
+            "conOriginales" => $conEnlacesOriginales,
+            "subida" => $subida->conEnlaces($conEnlacesOriginales),
         ]);
     }
 

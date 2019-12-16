@@ -6,6 +6,10 @@ use Exception;
 
 class Comun
 {
+
+    public static function diasRestantesHastaHoy($fecha){
+        return (strtotime($fecha) - strtotime(date("Y-m-d"))) / (60 * 60 * 24);
+    }
     public static function fechaYHoraActualParaMySQL()
     {
         return date("Y-m-d H:i:s");

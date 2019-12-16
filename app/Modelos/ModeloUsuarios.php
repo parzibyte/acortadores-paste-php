@@ -3,12 +3,27 @@
 namespace Parzibyte\Modelos;
 
 use Parzibyte\Servicios\BD;
+use Parzibyte\Servicios\Comun;
 use Parzibyte\Servicios\Seguridad;
 use Parzibyte\Servicios\SesionService;
 use PDO;
 
 class ModeloUsuarios
 {
+    public static function actualizar($id, $administrador, $fechaVencimientoPago)
+    {
+        $bd = BD::obtener();
+        $sentencia = $bd->prepare("UPDATE usuarios SET administrador = ?, fecha_vencimiento_pago = ? WHERE id = ?");
+        return $sentencia->execute([$administrador, $fechaVencimientoPago, $id,
+        ]);
+    }
+
+    public static function puedeVerEnlacesOriginales($idUsuario)
+    {
+        $usuario = self::uno($idUsuario);
+        if (boolval($usuario->administrador)) return true;
+        return Comun::diasRestantesHastaHoy($usuario->fecha_vencimiento_pago) >= 0;
+    }
 
     public static function login($correo, $palabraSecreta)
     {
@@ -119,7 +134,7 @@ class ModeloUsuarios
     public static function obtener()
     {
         $bd = BD::obtener();
-        $sentencia = $bd->prepare("select id, correo, administrador from usuarios");
+        $sentencia = $bd->prepare("select id, correo, administrador, fecha_vencimiento_pago from usuarios");
         $sentencia->execute();
         return $sentencia->fetchAll(PDO::FETCH_OBJ);
     }
@@ -135,7 +150,7 @@ class ModeloUsuarios
     public static function uno($idUsuario)
     {
         $bd = BD::obtener();
-        $sentencia = $bd->prepare("select id, correo, administrador from usuarios WHERE id = ?");
+        $sentencia = $bd->prepare("select id, correo, administrador,fecha_vencimiento_pago from usuarios WHERE id = ?");
         $sentencia->execute([$idUsuario]);
         return $sentencia->fetchObject();
     }

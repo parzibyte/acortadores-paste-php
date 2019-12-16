@@ -10,17 +10,37 @@
                         <h1>{{ subida.titulo }}</h1>
                     </div>
                     <div class="card-body">
-                        <h2 class="card-title">Actualizado por última vez: {{ subida.fecha }}</h2>
+                        <span class="badge badge-info">Actualizado en: {{ subida.fecha }}</span>
+                        <h2 class="card-title h4">Descripción</h2>
                         <pre>{{ subida.descripcion }}</pre>
-                        <h2>Enlaces de descarga</h2>
+                        <h2 class="h4">Enlaces de descarga
+                            {% if conOriginales or USUARIO_ADMIN %}
+                                <span class="badge badge-success">
+                                    Premium&nbsp;<i class="fa fa-check-circle"></i>
+                                </span>
+                            {% endif %}
+                        </h2>
                         {% for enlace in subida.enlaces %}
-                            <a rel="nofollow" target="_blank" href="{{ enlace.enlace_acortado }}"
-                               class="btn btn-primary mb-2">
+                            <a rel="nofollow" target="_blank"
+                               href="{{ conOriginales or USUARIO_ADMIN ? enlace.enlace_original : enlace.enlace_acortado }}"
+                               class="btn btn-{{ conOriginales or USUARIO_ADMIN? 'success':'info' }} mb-2">
                                 <i class="fa fa-download"></i>
                                 {{ enlace.leyenda }}
                             </a>
                             <br>
                         {% endfor %}
+                        {% if conOriginales and diasRestantes < 7 and not USUARIO_ADMIN %}
+                            <div class="alert alert-danger">
+                                Te quedan {{ diasRestantes }} día(s) de membresía. No olvides renovarla para seguir
+                                gozando de los privilegios
+                            </div>
+                        {% endif %}
+                        {% if not conOriginales and not USUARIO_ADMIN %}
+                            <div class="alert alert-info">
+
+                                <p>¿Harto de acortadores? contacta al administrador para obtener una membresía</p>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

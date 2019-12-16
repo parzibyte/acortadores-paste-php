@@ -12,6 +12,12 @@ use Parzibyte\Validator;
 class ControladorUsuarios
 {
 
+    public static function formularioEditar($idUsuario)
+    {
+        return view("usuarios/editar", ["usuario" => ModeloUsuarios::uno($idUsuario)]);
+
+    }
+
     public static function index()
     {
         return view("usuarios/mostrar", ["usuarios" => ModeloUsuarios::obtener()]);
@@ -148,6 +154,24 @@ class ControladorUsuarios
                 ->to("/registro")
                 ->do();
         }
+    }
+
+    public static function guardarCambios()
+    {
+        Validator::validateOrRedirect($_POST,
+            [
+                "required" => ["id", "fecha_vencimiento"],
+            ]);
+        $id = $_POST["id"];
+        $administrador = isset($_POST["administrador"]);
+        $fecha_vencimiento = $_POST["fecha_vencimiento"];
+        $resultado = ModeloUsuarios::actualizar($id, $administrador, $fecha_vencimiento);
+        Redirect::to("/usuarios")
+            ->with([
+                "mensaje" => $resultado ? "Actualizado correctamente" : "Error actualizando",
+                "tipo" => $resultado ? "success" : "danger",
+            ])
+            ->do();
     }
 
     public static function guardar()

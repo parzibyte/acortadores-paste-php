@@ -1,0 +1,43 @@
+{% extends "master.twig" %}
+{% block titulo %}Editar usuario
+{% endblock %}
+{% block contenido %}
+    <main class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center">Editar usuario</h1>
+            </div>
+            <div class="col-12 col-sm-3">
+                <form action="{{ URL_RAIZ }}/usuarios/guardarCambios" method="post">
+                    {% include "componentes/token_csrf.twig" %}
+                    {% include "componentes/sesion_flash.twig" %}
+                    <input type="hidden" value="{{ usuario.id }}" name="id">
+                    <div class="form-group">
+                        <label for="correo">Correo electrónico</label>
+                        <input readonly value="{{ usuario.correo }}" autocomplete="off" class="form-control" id="correo"
+                               placeholder="Correo electrónico" required type="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="administrador">Administrador</label>
+                        <input {{ usuario.administrador ? 'checked': '' }}
+                                id="administrador" name="administrador" type="checkbox">
+                        <small class="form-text text-muted">Si un usuario es administrador, podrá ver
+                            todos los enlaces, incluso los
+                            originales</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_vencimiento">Fecha de vencimiento</label>
+                        <input value="{{ usuario.fecha_vencimiento_pago }}" id="fecha_vencimiento"
+                               name="fecha_vencimiento" type="date">
+                        <small class="form-text text-muted">Si la membresía del usuario terminó, simplemente coloca una
+                            fecha anterior al día de
+                            hoy</small>
+                    </div>
+                    <button class="btn btn-success" type="submit">Guardar</button>
+                    <a class="btn btn-warning" href="{{ URL_RAIZ }}/usuarios">Ver usuarios</a>
+                </form>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}
