@@ -14,7 +14,7 @@ class ModeloUsuarios
     {
         $bd = BD::obtener();
         $sentencia = $bd->prepare("UPDATE usuarios SET administrador = ?, fecha_vencimiento_pago = ? WHERE id = ?");
-        return $sentencia->execute([$administrador, $fechaVencimientoPago, $id,
+        return $sentencia->execute([$administrador ? 1 : 0, $fechaVencimientoPago, $id,
         ]);
     }
 
@@ -74,7 +74,7 @@ class ModeloUsuarios
         $esAdministrador = intval($esAdministrador);
         $bd = BD::obtener();
         $sentencia = $bd->prepare("UPDATE usuarios SET administrador = ? WHERE id = ?");
-        return $sentencia->execute([$esAdministrador, $idUsuario]);
+        return $sentencia->execute([$esAdministrador ? 1 : 0, $idUsuario]);
     }
 
 
